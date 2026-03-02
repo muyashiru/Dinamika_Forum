@@ -12,6 +12,28 @@ use Illuminate\Validation\Rules\Password;
 class ProfileController extends Controller
 {
     /**
+     * Display a listing of all members.
+     */
+    public function index(Request $request)
+    {
+        $search = $request->get('search');
+        
+        $users = User::query()
+            ->withCount(['discussions', 'comments'])
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('username', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(20);
+
+        return view('profile.index', compact('users', 'search'));
+    }
+
+    /**
      * Display the user's profile.
      */
     public function show(User $user)

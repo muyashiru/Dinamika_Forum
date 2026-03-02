@@ -57,6 +57,9 @@ Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name
 // Reactions
 Route::post('reactions/toggle', [ReactionController::class, 'toggle'])->name('reactions.toggle');
 
+// Members/Anggota
+Route::get('/anggota', [ProfileController::class, 'index'])->name('members.index');
+
 // Profile
 Route::get('/@{user:username}', [ProfileController::class, 'show'])->name('profile.show');
 Route::middleware(['auth'])->group(function () {

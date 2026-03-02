@@ -57,6 +57,19 @@ class HomeController extends Controller
             ->limit(10)
             ->get();
 
+        // Return JSON for AJAX requests
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'discussions' => $discussions->items(),
+                'pagination' => [
+                    'current_page' => $discussions->currentPage(),
+                    'last_page' => $discussions->lastPage(),
+                    'per_page' => $discussions->perPage(),
+                    'total' => $discussions->total(),
+                ]
+            ]);
+        }
+
         return view('home', compact('discussions', 'popularTags', 'filter', 'tag', 'search'));
     }
 }

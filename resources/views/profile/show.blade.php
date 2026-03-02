@@ -3,7 +3,7 @@
 @section('title', $user->name . ' - Profil DINAMIKA')
 
 @section('content')
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
         <div class="flex items-start gap-4">
             <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="w-20 h-20 rounded-full object-cover">
