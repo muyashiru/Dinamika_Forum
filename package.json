@@ -1,0 +1,26 @@
+{
+    "name": "dinamika-forum",
+    "version": "1.0.0",
+    "description": "DINAMIKA Forum - Forum Dinasti Mahasiswa Teknik Informatika",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "devDependencies": {
+        "@tailwindcss/forms": "^0.5.3",
+        "@tailwindcss/typography": "^0.5.9",
+        "autoprefixer": "^10.4.14",
+        "axios": "^1.4.0",
+        "laravel-vite-plugin": "^0.7.5",
+        "postcss": "^8.4.24",
+        "tailwindcss": "^3.3.2",
+        "vite": "^4.3.9"
+    },
+    "dependencies": {
+        "@heroicons/react": "^2.0.18",
+        "alpinejs": "^3.12.3"
+    }
+}
