@@ -14,7 +14,8 @@ class DiscussionController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show']);
-        $this->middleware('verified')->except(['index', 'show']);
+        // Email verification disabled for development
+        // $this->middleware('verified')->except(['index', 'show']);
     }
 
     /**

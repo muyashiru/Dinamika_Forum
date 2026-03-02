@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,13 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+// Email Verification
+Route::middleware('auth')->group(function () {
+    Route::get('email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
+    Route::get('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+    Route::post('email/verification-notification', [VerificationController::class, 'resend'])->name('verification.resend');
+});
 
 // Google OAuth
 Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
@@ -51,7 +59,7 @@ Route::post('reactions/toggle', [ReactionController::class, 'toggle'])->name('re
 
 // Profile
 Route::get('/@{user:username}', [ProfileController::class, 'show'])->name('profile.show');
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
