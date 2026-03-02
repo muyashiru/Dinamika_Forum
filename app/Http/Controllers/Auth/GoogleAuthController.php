@@ -16,6 +16,11 @@ class GoogleAuthController extends Controller
      */
     public function redirect()
     {
+        if (! $this->googleOauthConfigured()) {
+            return redirect()->route('login')
+                ->with('error', 'Login Google belum dikonfigurasi. Silakan hubungi admin.');
+        }
+
         return Socialite::driver('google')->redirect();
     }
 
@@ -24,6 +29,11 @@ class GoogleAuthController extends Controller
      */
     public function callback()
     {
+        if (! $this->googleOauthConfigured()) {
+            return redirect()->route('login')
+                ->with('error', 'Login Google belum dikonfigurasi. Silakan hubungi admin.');
+        }
+
         try {
             $googleUser = Socialite::driver('google')->user();
 
@@ -94,5 +104,15 @@ class GoogleAuthController extends Controller
         }
 
         return $username;
+    }
+
+    /**
+     * Check if Google OAuth credentials are configured.
+     */
+    private function googleOauthConfigured(): bool
+    {
+        return filled(config('services.google.client_id'))
+            && filled(config('services.google.client_secret'))
+            && filled(config('services.google.redirect'));
     }
 }

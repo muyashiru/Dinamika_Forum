@@ -40,6 +40,7 @@ php artisan key:generate
 Edit `.env`:
 
 ```env
+APP_URL=http://localhost:8000
 DB_DATABASE=dinamika_forum
 DB_USERNAME=root
 DB_PASSWORD=
@@ -145,6 +146,18 @@ php artisan serve --port=8001
 ```bash
 npm run build
 php artisan config:clear
+```
+
+### Google login tidak muncul / gagal redirect?
+```env
+GOOGLE_CLIENT_ID=your_client_id
+GOOGLE_CLIENT_SECRET=your_client_secret
+GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
+```
+
+Lalu jalankan:
+```bash
+php artisan optimize:clear
 ```
 
 ### Permission errors (Linux/Mac)?
