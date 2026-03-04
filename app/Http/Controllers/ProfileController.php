@@ -17,15 +17,16 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('search');
-        
+
         $users = User::query()
             ->withCount(['discussions', 'comments'])
             ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
-                      ->orWhere('username', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%");
-                });
+                        ->orWhere('username', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                }
+                );
             })
             ->latest()
             ->paginate(20);
@@ -72,15 +73,25 @@ class ProfileController extends Controller
         ]);
 
         if ($request->hasFile('avatar')) {
+            // Tentukan disk storage: 'supabase' di Vercel production, 'public' di local
+            $disk = env('FILESYSTEM_DISK', 'public');
+
             // Delete old avatar if exists
             if ($user->avatar && !filter_var($user->avatar, FILTER_VALIDATE_URL)) {
-                Storage::disk('public')->delete('avatars/' . $user->avatar);
+                Storage::disk($disk)->delete('avatars/' . $user->avatar);
             }
 
             // Store new avatar
             $filename = time() . '_' . $request->file('avatar')->getClientOriginalName();
-            $request->file('avatar')->storeAs('avatars', $filename, 'public');
-            $validated['avatar'] = $filename;
+            $request->file('avatar')->storeAs('avatars', $filename, $disk);
+
+            // Jika menggunakan Supabase Storage, simpan URL lengkap
+            if ($disk === 'supabase') {
+                $validated['avatar'] = env('SUPABASE_URL') . '/storage/v1/object/public/' . env('SUPABASE_STORAGE_BUCKET', 'avatars') . '/avatars/' . $filename;
+            }
+            else {
+                $validated['avatar'] = $filename;
+            }
         }
 
         $user->update($validated);
