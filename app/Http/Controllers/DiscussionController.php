@@ -14,8 +14,8 @@ class DiscussionController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show']);
-        // Email verification disabled for development
-        // $this->middleware('verified')->except(['index', 'show']);
+        // Aktifkan email verification di production
+        $this->middleware('verified')->except(['index', 'show']);
     }
 
     /**
@@ -114,7 +114,8 @@ class DiscussionController extends Controller
 
         if (isset($validated['tags'])) {
             $discussion->tags()->sync($validated['tags']);
-        } else {
+        }
+        else {
             $discussion->tags()->detach();
         }
 
@@ -175,7 +176,8 @@ class DiscussionController extends Controller
         if ($discussion->is_solved) {
             $discussion->markAsUnsolved();
             $message = 'Diskusi ditandai sebagai belum selesai.';
-        } else {
+        }
+        else {
             $discussion->markAsSolved();
             $message = 'Diskusi ditandai sebagai selesai.';
         }
